@@ -139,3 +139,25 @@ self.addEventListener("install", function (event) {
     openDatabase()
   );
 });
+
+if ("serviceWorker" in navigator) {
+  console.log("working");
+  navigator.serviceWorker.ready
+    .then(function (registration) {
+      return registration.sync.register("sync-payload");
+    })
+    .catch(function (err) {
+      console.error("Service Worker registration failed:", err);
+    });
+} else {
+  console.error("SyncManager is not supported in this browser.");
+}
+
+self.addEventListener("sync", function (event) {
+  console.log("syn event now");
+  if (event.tag === "sync-payload") {
+    event.waitUntil(console.log("working"));
+  } else {
+    console.log("failed");
+  }
+});

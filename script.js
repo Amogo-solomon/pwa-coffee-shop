@@ -1,3 +1,5 @@
+self.addEventListener("online", () => alert("You are online"));
+self.addEventListener("offline", () => alert("You are offline"));
 document.addEventListener('DOMContentLoaded', function() {
     const cartItemsContainer = document.querySelector('.cart-items');
     const totalPriceElement = document.querySelector('.total-price');

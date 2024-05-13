@@ -5,18 +5,25 @@ function triggerBackgroundSync() {
   if ('SyncManager' in window) {
       navigator.serviceWorker.ready.then(function(registration) {
           return registration.sync.register('checkoutDataSync');
-      }).catch(function(err) {
+      })
+      .then(()=>{
+        self.addEventListener('sync', function(event) {
+            console.log("synching")
+            if (event.tag === 'checkoutDataSync') {
+                event.waitUntil(syncCheckoutData());
+            }
+          });
+      })
+      .catch(function(err) {
           console.error('Background sync registration failed:', err);
       });
   }
 }
 
+triggerBackgroundSync()
+
 // Event listener for sync event
-self.addEventListener('sync', function(event) {
-  if (event.tag === 'checkoutDataSync') {
-      event.waitUntil(syncCheckoutData());
-  }
-});
+
 
 // Function to synchronize checkout form data with the server
 function syncCheckoutData() {
